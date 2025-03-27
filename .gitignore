@@ -1,1 +1,1 @@
-echo "backend/model1_MobileNetV2.h5" >> .gitignore
+/backend/model1_MobileNetV2.h5
