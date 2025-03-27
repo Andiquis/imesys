@@ -1,0 +1,63 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-6">
+    <!-- Título de la marca con animación -->
+    <h1 class="text-5xl font-bold neon-text mb-8 animate-pulse">IMESYS</h1>
+    <p class="text-lg text-gray-300 mb-10 text-center max-w-2xl">Intelligent Medical System: Potenciando la medicina con inteligencia artificial</p>
+    
+    <!-- Contenedor de aplicaciones -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+      <!-- IA Detector de Enfermedades -->
+      <div class="app-card">
+        <i class="fas fa-microscope text-5xl text-blue-400 animate-spin-slow"></i>
+        <h2 class="text-xl font-semibold mt-4">IA Detector de Enfermedades</h2>
+        <p class="text-gray-300 mt-2 text-center">Analiza imágenes médicas con precisión y rapidez.</p>
+      </div>
+      
+      <!-- Chatbot Médico -->
+      <div class="app-card">
+        <i class="fas fa-comments text-5xl text-green-400 animate-bounce"></i>
+        <h2 class="text-xl font-semibold mt-4">Chatbot Médico</h2>
+        <p class="text-gray-300 mt-2 text-center">Asistencia médica 24/7 con IA avanzada.</p>
+      </div>
+      
+      <!-- Gestión de Pacientes -->
+      <div class="app-card">
+        <i class="fas fa-user-md text-5xl text-purple-400 animate-wiggle"></i>
+        <h2 class="text-xl font-semibold mt-4">Gestión de Pacientes</h2>
+        <p class="text-gray-300 mt-2 text-center">Historial clínico y seguimiento personalizado.</p>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    .neon-text {
+      text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #0ff;
+    }
+  
+    .app-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+  
+    .app-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+  
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    .animate-wiggle { animation: wiggle 2s infinite ease-in-out; }
+  
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow { animation: spin-slow 10s linear infinite; }
+  </style>

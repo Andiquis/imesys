@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h2>IMESYS SYSTEM</h2>
+    <a routerLink="/dashboard/control-flow" [class.active]="currentRoute === '/dashboard/control-flow'">
+      <i class="fas fa-home"></i> <span>Home</span>
+    </a>
+    <a routerLink="/dashboard/mod-vision" [class.active]="currentRoute === '/dashboard/mod-vision'">
+      <i class="fas fa-notes-medical"></i> <span>Análisis médico</span>
+    </a>
+    <a routerLink="/dashboard/change-detection" [class.active]="currentRoute === '/dashboard/change-detection'">
+      <i class="fas fa-robot"></i> <span>AsistenteIA</span>
+    </a>
+    <a routerLink="/dashboard/chatbot" [class.active]="currentRoute === '/dashboard/chatbot'">
+      <i class="fas fa-robot"></i> <span>Chatbot</span>
+    </a>
+    <a routerLink="/dashboard/users-list" [class.active]="currentRoute === '/dashboard/users-list'">
+      <i class="fas fa-users"></i> <span>Usuarios</span>
+    </a>
+    <a routerLink="/dashboard/estudiantes" [class.active]="currentRoute === '/dashboard/estudiantes'">
+      <i class="fas fa-user-injured"></i> <span>Pacientes</span>
+    </a>
+    <a routerLink="/dashboard/defer-option" [class.active]="currentRoute === '/dashboard/defer-option'">
+      <i class="fas fa-brain"></i> <span>ImesysGPT</span>
+    </a>
+    <a routerLink="/dashboard/defer-views" [class.active]="currentRoute === '/dashboard/defer-views'">
+      <i class="fas fa-hospital"></i> <span>Clínicas</span>
+    </a>
+    <a routerLink="/dashboard/view-transition" [class.active]="currentRoute === '/dashboard/view-transition'">
+      <i class="fas fa-ellipsis-h"></i> <span>Más</span>
+    </a>
+</nav>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <header class="header">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-folder-open text-white"></i>
+        <h1>{{ moduleTitle }}</h1>
+      </div>
+    </header>
+
+    <div class="p-6 flex-1">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+
+<style>
+.active {
+  background-color: #1c3144;
+  color: white;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+body {
+  display: flex;
+  height: 100vh;
+  background: #16202f;
+}
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #253858, #386b97);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.3s, box-shadow 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.sidebar a:hover {
+  background: #25415a;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15);
+}
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to right, #43d2fa, #0148b2);
+  color: rgb(0, 0, 0);
+  padding: 15px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 30px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.card i {
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: #1c3144;
+}
+
+</style>

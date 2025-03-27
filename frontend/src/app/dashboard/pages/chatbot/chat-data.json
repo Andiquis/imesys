@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "user": "Hola, tengo una duda médica.",
+        "bot": "¡Hola! Claro, dime en qué puedo ayudarte."
+    },
+    {
+        "id": 1,
+        "user": "Me duele la cabeza desde hace dos días.",
+        "bot": "Lo siento. ¿Has tenido fiebre o algún otro síntoma?"
+    },
+    {
+        "id": 1,
+        "user": "No, solo el dolor de cabeza.",
+        "bot": "Podría ser por estrés, deshidratación o falta de sueño. ¿Has descansado bien?"
+    },
+    {
+        "id": 1,
+        "user": "No mucho, he dormido como 4 horas por noche.",
+        "bot": "Eso podría ser la causa. Intenta dormir al menos 7-8 horas y mantente hidratado."
+    },
+    {
+        "id": 1,
+        "user": "Gracias, lo intentaré.",
+        "bot": "De nada. Si el dolor persiste, consulta con un médico. ¡Cuídate!"
+    }
+]
+
+  

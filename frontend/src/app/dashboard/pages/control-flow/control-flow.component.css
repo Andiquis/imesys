@@ -1,0 +1,40 @@
+
+.neon-text {
+  text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+}
+
+.border-neon {
+  border-color: #0ff;
+}
+
+.bg-neon-dark {
+  background: rgba(0, 255, 255, 0.2);
+}
+
+.bg-neon-light:hover {
+  background: rgba(0, 255, 255, 0.4);
+}
+
+.btn-neon {
+  background: #0ff;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.btn-neon:hover {
+  box-shadow: 0 0 10px #0ff;
+}
+
+.btn-neon-danger {
+  background: #f00;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.btn-neon-danger:hover {
+  box-shadow: 0 0 10px #f00;
+}

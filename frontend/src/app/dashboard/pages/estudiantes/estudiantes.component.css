@@ -1,0 +1,97 @@
+
+.neon-text {
+  text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+}
+
+.border-neon {
+  border-color: #0ff;
+}
+
+.bg-neon-dark {
+  background: rgba(0, 255, 255, 0.2);
+}
+
+.bg-neon-light:hover {
+  background: rgba(0, 255, 255, 0.4);
+}
+
+.btn-neon {
+  background: #0ff;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.btn-neon:hover {
+  box-shadow: 0 0 10px #0ff;
+}
+
+.btn-neon-danger {
+  background: #f00;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.btn-neon-danger:hover {
+  box-shadow: 0 0 10px #f00;
+}
+.neon-text {
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+}
+
+.border-neon {
+  border-color: #00ffcc;
+}
+
+.bg-neon-dark {
+  background-color: #001f1f;
+}
+
+.btn-neon {
+  background-color: #00ffcc;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-neon-danger {
+  background-color: #ff4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid #00ffcc;
+  background: black;
+  color: white;
+}

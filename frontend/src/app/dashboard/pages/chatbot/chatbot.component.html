@@ -1,0 +1,36 @@
+<div class="flex flex-col items-center text-white min-h-screen py-10 " >
+  <h2 class="text-2xl font-bold mb-4 text-black">Imesys AI</h2>
+  
+  <div class="bg-gray-800 p-4 rounded-xl shadow-lg w-full max-w-md flex flex-col h-[500px]">
+    <div class="flex flex-col flex-grow overflow-y-auto p-2 space-y-2">
+      <div *ngFor="let chat of chatHistory">
+        <!-- Mensaje del usuario -->
+        <div *ngIf="chat.id === userId" class="flex items-end justify-end gap-2">
+          <div class="bg-blue-600 p-3 rounded-lg max-w-[75%] text-white">
+            <p class="text-sm">{{ chat.user }}</p>
+          </div>
+          <i class="fas fa-user text-white text-2xl"></i>
+        </div>
+
+        <!-- Mensaje del bot -->
+        <div class="flex items-start gap-2">
+          <i class="fas fa-robot text-blue-400 text-2xl"></i>
+          <div class="bg-gray-700 p-3 rounded-lg max-w-[75%] text-white">
+            <p class="text-sm">{{ chat.bot }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entrada de texto -->
+    <div class="mt-4 flex gap-2 border-t border-gray-700 pt-2">
+      <input [(ngModel)]="userMessage"
+        class="flex-grow px-4 py-2 rounded-full bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Escribe un mensaje..." />
+      <button (click)="sendMessage()" 
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full shadow-md">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
