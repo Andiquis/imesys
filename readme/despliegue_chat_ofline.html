@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Llama3 con Ollama</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 40px;
+            max-width: 900px;
+            margin: auto;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #00d4ff;
+        }
+        pre {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #0f0;
+            font-size: 14px;
+            text-align: left;
+        }
+        a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Tutorial: Configurar un Chat con Llama3 y Ollama</h1>
+    
+    <div class="container">
+        <h2>🔹 1. Instalar Ollama</h2>
+        <p>Descargar e instalar Ollama desde:</p>
+        <p><a href="https://ollama.com/download" target="_blank">🔗 Descargar Ollama</a></p>
+        <p>Verificar instalación:</p>
+        <pre>ollama --version</pre>
+    </div>
+    
+    <div class="container">
+        <h2>🔹 2. Descargar el Modelo Llama3</h2>
+        <pre>ollama pull llama3</pre>
+    </div>
+    
+    <div class="container">
+        <h2>🔹 3. Configurar el Backend con Node.js</h2>
+        <h3>1️⃣ Instalar Node.js</h3>
+        <p><a href="https://nodejs.org/" target="_blank">🔗 Descargar Node.js</a></p>
+        <h3>2️⃣ Crear Proyecto</h3>
+        <pre>mkdir chat-ai
+cd chat-ai
+npm init -y</pre>
+        <h3>3️⃣ Instalar Dependencias</h3>
+        <pre>npm install express cors axios</pre>
+        <h3>4️⃣ Crear el Servidor</h3>
+        <pre>import express from 'express';
+import axios from 'axios';
+import cors from 'cors';
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+app.use(cors());
+
+const context = "Eres un asistente de IA experto en programación. Da respuestas detalladas y concisas.";
+
+app.post('/chat', async (req, res) => {
+    const { prompt } = req.body;
+    try {
+        const response = await axios.post('http://localhost:11434/api/generate', {
+            model: 'llama3',
+            prompt: `${context}\n\nUsuario: ${prompt}\nIA:`,
+            stream: false
+        });
+        res.json({ response: response.data.response });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al procesar la solicitud' });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});</pre>
+    </div>
+    
+    <div class="container">
+        <h2>🔹 4. Crear el Frontend (HTML + JavaScript)</h2>
+        <pre>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat con Llama3</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        textarea { width: 80%; height: 100px; }
+        button { margin-top: 10px; padding: 10px 20px; }
+        #respuesta { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Chat con Llama3</h1>
+    <textarea id="prompt" placeholder="Escribe tu pregunta..."></textarea>
+    <br>
+    <button onclick="enviarPrompt()">Enviar</button>
+    <p id="respuesta"></p>
+    <script>
+        async function enviarPrompt() {
+            const prompt = document.getElementById('prompt').value;
+            const respuesta = document.getElementById('respuesta');
+            respuesta.textContent = "Procesando...";
+            try {
+                const response = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await response.json();
+                respuesta.textContent = data.response;
+            } catch (error) {
+                respuesta.textContent = "Error al obtener respuesta.";
+            }
+        }
+    </script>
+</body>
+</html>
+        </pre>
+    </div>
+    
+    <div class="container">
+        <h2>🔹 5. Probar Todo</h2>
+        <h3>1️⃣ Iniciar Ollama</h3>
+        <pre>ollama serve ó ollama run llama3</pre>
+        <h3>2️⃣ Iniciar el Servidor</h3>
+        <pre>node server.js ó npm start</pre>
+        <h3>3️⃣ Abrir index.html en el Navegador</h3>
+        <p>¡Ahora puedes chatear con Llama3 desde tu navegador! 🎉</p>
+    </div>
+</body>
+</html>

@@ -1,6 +1,276 @@
-<div class="landing-container">
-    <h1>Bienvenido a Imesys</h1>
-    <p>Explora nuestra plataforma y descubre todas sus funcionalidades.</p>
-    <button (click)="goToDashboard()">Ir al Dashboard</button>
-  </div>
-  
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMASYS - Plataforma de Salud</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+   
+</head>
+<body class="m-0 p-0 bg-gradient-to-r from-[#5DD9FC] to-[#0052CC]">
+    <header class="sticky-header flex justify-between items-center p-4">
+        <img src="images/img_landing/logo.png" alt="Logo" class="logo">
+        <h1 class="text-2xl font-bold text-white">IMESYS</h1>
+        <nav>
+            <ul class="flex space-x-4">
+            <li><a href="#inicio" class="text-white hover:text-gray-200">Inicio</a></li>
+        <li><a href="#servicios" class="text-white hover:text-gray-200">Servicios</a></li>
+        <li><a href="#contacto" class="text-white hover:text-gray-200">Contacto</a></li>
+        <li><a href="#inicio" class="text-white hover:text-gray-200">Iniciar Sección</a></li>
+        
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="inicio" class="hero-section">
+        <div>
+            <iframe src="html/imesys.html" width="1200" height="600"></iframe>
+            <!--h2 class="text-4xl font-bold">Bienvenido a IMESYS</h2>
+            <p class="text-lg mt-4">Tu plataforma digital </p-->
+            <button (click)="goToDashboard()" class="mt-6 px-6 py-3 bg-white text-blue-500 rounded-lg shadow-lg hover:bg-gray-100">Conocer más</button>
+        </div>
+    </section>
+    <!-- Sección "Quiénes Somos" -->
+<section id="quienes-somos" class="py-12 px-6 bg-gray-100">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center">
+        <!-- Imágenes a la izquierda -->
+        <div class="md:w-1/2 grid grid-cols-2 gap-4">
+            <img src="images/img_landing/videoframe.png" alt="Equipo médico" class="rounded-lg shadow-lg">
+            <img src="images/img_landing/centro.jpg" alt="Instalaciones" class="rounded-lg shadow-lg">
+            <img src="images/img_landing/persona.jpg" alt="Paciente feliz" class="rounded-lg shadow-lg col-span-2">
+        </div>
+
+        <!-- Contenido a la derecha -->
+        <div class="md:w-1/2 md:pl-12">
+            <h2 class="text-3xl font-bold text-gray-800">Quiénes Somos</h2>
+            <p class="text-gray-600 mt-4">
+            IMESYS es una innovadora plataforma de salud digital basada en inteligencia artificial que optimiza la atención médica. Permite a los pacientes acceder a un asistente virtual para orientación médica, gestionar citas con especialistas y evaluar riesgos de enfermedades mediante IA. Además, ofrece herramientas avanzadas de diagnóstico asistido, como análisis de imágenes médicas con deep learning, brindando apoyo a profesionales de la salud para mejorar la toma de decisiones clínicas.
+            </p>
+
+            <!-- Objetivos -->
+<div class="mt-6 grid grid-cols-2 md:grid-cols-3 gap-8">
+    <div class="text-center">
+        <div class="bg-pink-200 p-4 rounded-full inline-block">
+            <svg class="w-8 h-8 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-2">Asistente Virtual</h3>
+        <p class="text-gray-600 text-sm">IA que brinda información médica, consejos de salud y orientación sobre síntomas.</p>
+    </div>
+
+    <div class="text-center">
+        <div class="bg-blue-200 p-4 rounded-full inline-block">
+            <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-2">Gestión de Citas</h3>
+        <p class="text-gray-600 text-sm">Reservas de consultas médicas con especialistas de forma eficiente.</p>
+    </div>
+
+    <div class="text-center">
+        <div class="bg-green-200 p-4 rounded-full inline-block">
+            <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-2">Gestión de Pacientes</h3>
+        <p class="text-gray-600 text-sm">Sistema digital para registrar, organizar y administrar información médica.</p>
+    </div>
+
+    <div class="text-center">
+        <div class="bg-yellow-200 p-4 rounded-full inline-block">
+            <svg class="w-8 h-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-2">Predicción de Enfermedades</h3>
+        <p class="text-gray-600 text-sm">IA para evaluar riesgos de salud como diabetes basada en datos biométricos.</p>
+    </div>
+
+    <div class="text-center">
+        <div class="bg-purple-200 p-4 rounded-full inline-block">
+            <svg class="w-8 h-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 7V9" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-2">Análisis de Imágenes</h3>
+        <p class="text-gray-600 text-sm">Deep learning para detectar neumonía mediante imágenes médicas.</p>
+    </div>
+
+    <div class="text-center">
+        <div class="bg-teal-200 p-4 rounded-full inline-block">
+            <svg class="w-8 h-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20l-5-5h10l-5 5zm0-16l-5 5h10l-5-5z" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-2">Interfaz Accesible</h3>
+        <p class="text-gray-600 text-sm">Garantizar una experiencia amigable para todos los usuarios.</p>
+    </div>
+</div>
+
+    </div>
+    </div>
+</section>
+    <section id="servicios" class="py-12 px-6 bg-gray-100">
+    <div class="max-w-6xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-gray-800">Nuestros Servicios</h2>
+        <p class="text-gray-600 mt-2">
+            IMESYS ofrece soluciones avanzadas para pacientes y médicos, optimizando la atención médica con tecnología de IA.
+        </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-6xl mx-auto">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <img src="images/img_landing/bot.png" alt="Asistente IA" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-gray-800">Asistente IA</h3>
+                <p class="text-gray-600 mt-2">Obtén recomendaciones y respuestas inmediatas sobre tu salud con inteligencia artificial.</p>
+            </div>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <img src="images/img_landing/citas.jpg" alt="Gestión de Citas" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-gray-800">Gestión de Citas</h3>
+                <p class="text-gray-600 mt-2">Reserva, gestiona y recibe recordatorios de citas médicas en un solo lugar.</p>
+            </div>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <img src="images/img_landing/entidades.png" alt="Búsqueda de Entidades de Salud" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-gray-800">Búsqueda de Entidades de Salud</h3>
+                <p class="text-gray-600 mt-2">Encuentra hospitales, clínicas y farmacias cercanas de manera rápida y sencilla.</p>
+            </div>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <img src="images/img_landing/diagnosis.jpg" alt="Diagnóstico asistido con IA" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-gray-800">Diagnóstico Asistido con IA</h3>
+                <p class="text-gray-600 mt-2">Apoya a los médicos con análisis inteligentes de síntomas e imágenes médicas.</p>
+            </div>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <img src="images/img_landing/descuentos.jpg" alt="Descuentos en Farmacias" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-gray-800">Descuentos en Farmacias</h3>
+                <p class="text-gray-600 mt-2">Aprovecha beneficios exclusivos en farmacias afiliadas con nuestras alianzas.</p>
+            </div>
+        </div>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <img src="images/img_landing/vida.jpg" alt="Descuentos en Farmacias" class="w-full h-40 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-gray-800">Descuentos en Farmacias</h3>
+                <p class="text-gray-600 mt-2">Aprovecha beneficios exclusivos en farmacias afiliadas con nuestras alianzas.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section class="flex flex-col lg:flex-row items-center py-12 px-6 bg-white">
+        <div class="lg:w-1/2 text-center lg:text-left"></div>
+    <div class="lg:w-1/2 text-center lg:text-left">
+        <h3 class="text-blue-600 font-semibold mb-2">Descubre cómo IMASYS mejora tu salud</h3>
+        <h2 class="text-3xl font-bold text-gray-800">Atención Médica Digital Rápida y Segura</h2>
+        <p class="text-gray-600 mt-4">
+            Con tecnología avanzada y profesionales de la salud, ofrecemos atención médica en minutos.
+            Accede a consultas virtuales y diagnóstico con inteligencia artificial sin necesidad de citas previas.
+        </p>
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+            <div class="flex items-center space-x-2">
+                <span class="text-blue-500">✔</span> <span>Evaluación de síntomas</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-blue-500">✔</span> <span>Consultas médicas en línea</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-blue-500">✔</span> <span>Análisis de imágenes médicas</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-blue-500">✔</span> <span>Recetas electrónicas</span>
+            </div>
+        </div>
+    </div>
+    <div class="lg:w-1/2 flex justify-center relative mt-6 lg:mt-0">
+        
+        <button class="absolute inset-0 flex items-center justify-center">
+            <div class="">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/sOL9jndzGWo?si=9NCWJI7_nomVfAS8" title="▶" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </button>
+    </div>
+</section>
+
+    
+    <section class="py-12 bg-white text-center">
+        <h2 class="text-3xl font-bold text-gray-800">Conoce a los especialistas mas recomendados</h2>
+        <p class="text-gray-600 mt-2">Un equipo de profesionales comprometidos con tu salud</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 px-6">
+    <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg flex flex-col">
+        <img src="images/img_landing/medico1.jpg" alt="Doctor 1" class="w-full h-60 object-cover">
+        <div class="p-4">
+            <h3 class="font-bold text-lg">Dr. Juan Pérez</h3>
+            <p class="text-blue-500">Pediatría</p>
+            <p class="text-gray-600 text-sm mt-2">Especialista en atención infantil con más de 10 años de experiencia.</p>
+        </div>
+    </div>
+    <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg flex flex-col">
+        <img src="images/img_landing/medico2.jpg" alt="Doctor 2" class="w-full h-60 object-cover">
+        <div class="p-4">
+            <h3 class="font-bold text-lg">Dra. María López</h3>
+            <p class="text-blue-500">Cardiología</p>
+            <p class="text-gray-600 text-sm mt-2">Experta en enfermedades del corazón y cuidado preventivo.</p>
+        </div>
+    </div>
+    <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg flex flex-col">
+        <img src="images/img_landing/medico3.jpg" alt="Doctor 3" class="w-full h-60 object-cover">
+        <div class="p-4">
+            <h3 class="font-bold text-lg">Dr. Ricardo Gómez</h3>
+            <p class="text-blue-500">Neurología</p>
+            <p class="text-gray-600 text-sm mt-2">Especialista en trastornos del sistema nervioso.</p>
+        </div>
+    </div>
+    <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg flex flex-col">
+        <img src="images/img_landing/medico4.jpg" alt="Doctor 4" class="w-full h-60 object-cover">
+        <div class="p-4">
+            <h3 class="font-bold text-lg">Dra. Sofía Méndez</h3>
+            <p class="text-blue-500">Dermatología</p>
+            <p class="text-gray-600 text-sm mt-2">Especialista en el cuidado de la piel y tratamientos estéticos.</p>
+        </div>
+    </div>
+</div>
+
+    </section>
+    <!-- Sección de Farmacias Asociadas -->
+<section id="farmacias" class="py-12 bg-white">
+    <h2 class="text-3xl font-bold text-center text-gray-800">Farmacias Asociadas</h2>
+    <div class="mt-8 overflow-x-auto whitespace-nowrap flex space-x-6 px-6">
+        <img src="images/img_landing/farmacia1.png" alt="Farmacia 1" class="h-20 rounded-lg shadow-md">
+        <img src="images/img_landing/farmacia2.png" alt="Farmacia 2" class="h-20 rounded-lg shadow-md">
+        <img src="images/img_landing/farmacia1.png" alt="Farmacia 3" class="h-20 rounded-lg shadow-md">
+        <img src="images/img_landing/farmacia2.png" alt="Farmacia 4" class="h-20 rounded-lg shadow-md">
+    </div>
+</section>
+    
+    <footer class="bg-gray-900 text-white p-6 flex justify-between">
+        <div class="w-1/2">
+            <h3 class="text-lg font-bold">Síguenos en redes</h3>
+            <p class="mt-2">Conéctate con nosotros en nuestras plataformas digitales.</p>
+            <div class="flex space-x-4 mt-4">
+                <a href="#" class="text-white">Facebook</a>
+                <a href="#" class="text-white">Twitter</a>
+                <a href="#" class="text-white">Instagram</a>
+            </div>
+        </div>
+        <div class="w-1/2" id="contacto">
+            <h3 class="text-lg font-bold">Contáctanos</h3>
+            <form class="mt-4 space-y-4">
+                <input type="text" placeholder="Nombre" class="w-full p-2 rounded-md text-black">
+                <input type="email" placeholder="Correo Electrónico" class="w-full p-2 rounded-md text-black">
+                <textarea placeholder="Mensaje" class="w-full p-2 rounded-md text-black"></textarea>
+                <button type="submit" class="w-full bg-blue-500 py-2 rounded-md">Enviar</button>
+            </form>
+        </div>
+    </footer>
+    
+</body>
+</html>

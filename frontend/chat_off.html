@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat con IMESYS</title>
+    <style>
+        :root {
+            --primary-color: #128C7E;
+            --primary-dark: #075E54;
+            --secondary-color: #25D366;
+            --light-color: #DCF8C6;
+            --white: #FFFFFF;
+            --gray-light: #ECE5DD;
+            --gray-medium: #D1D1D1;
+            --gray-dark: #4A4A4A;
+            --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #eebc8a;
+            background-image: url('https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png');
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            height: 90vh;
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-image: url('https://i.pinimg.com/736x/32/03/1a/32031acc53726ba3d6c606bedc664cd8.jpg');
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            max-width: 80%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 7.5px;
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .received {
+            align-self: flex-start;
+            background-color: var(--white);
+            color: var(--gray-dark);
+            border-top-left-radius: 0;
+        }
+        
+        .sent {
+            align-self: flex-end;
+            background-color: var(--light-color);
+            color: var(--gray-dark);
+            border-top-right-radius: 0;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: var(--gray-dark);
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            background-color: var(--white);
+            display: flex;
+            align-items: center;
+            border-top: 1px solid var(--gray-medium);
+        }
+        
+        .chat-input textarea {
+            flex: 1;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 15px;
+            resize: none;
+            max-height: 100px;
+            outline: none;
+            font-size: 14px;
+            background-color: var(--white);
+            box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+        }
+        
+        .send-button {
+            margin-left: 10px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .send-button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .send-button i {
+            font-size: 18px;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            padding: 10px 15px;
+            background-color: var(--white);
+            border-radius: 20px;
+            align-self: flex-start;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+        }
+        
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: var(--gray-medium);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        .error-message {
+            color: #ff4444;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div style="display: flex; align-items: center;">
+                <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--secondary-color); color: white; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">IM</div>
+                <div>
+                    <div style="font-weight: 500; color: white;">IMESYS Bot</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.8);">En línea</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="message received">
+                ¡Hola! Soy IMESYS, tu asistente virtual. ¿En qué puedo ayudarte hoy?
+                <div class="message-time">10:30 AM</div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <i class="far fa-smile" style="margin-right: 10px; font-size: 20px; color: var(--gray-dark); cursor: pointer;"></i>
+            <i class="fas fa-paperclip" style="margin-right: 10px; font-size: 20px; color: var(--gray-dark); cursor: pointer;"></i>
+            <textarea id="message-input" placeholder="Escribe un mensaje" rows="1"></textarea>
+            <button class="send-button" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Función para enviar mensaje al backend
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            const chatMessages = document.getElementById('chat-messages');
+            
+            if (!message) return;
+            
+            // Añadir mensaje del usuario
+            const time = getCurrentTime();
+            addMessageToChat('Yo', message, time, true);
+            
+            // Limpiar input
+            input.value = '';
+            
+            // Mostrar "escribiendo..."
+            showTypingIndicator();
+            
+            try {
+                // Enviar mensaje al backend
+                const response = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: message })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                const data = await response.json();
+                
+                // Ocultar "escribiendo..."
+                removeTypingIndicator();
+                
+                // Mostrar respuesta del bot
+                const responseTime = getCurrentTime();
+                addMessageToChat('IMESYS', data.response || "No recibí una respuesta válida", responseTime, false);
+                
+            } catch (error) {
+                removeTypingIndicator();
+                showError("Error al conectar con el servidor. Intenta nuevamente.");
+                console.error('Error:', error);
+            }
+        }
+        
+        // Función para añadir mensaje al chat
+        function addMessageToChat(sender, text, time, isSent) {
+            const chatMessages = document.getElementById('chat-messages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+            
+            messageDiv.innerHTML = `
+                ${text}
+                <div class="message-time">${time}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Función para mostrar indicador de "escribiendo"
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chat-messages');
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <span></span>
+                <span></span>
+                <span></span>
+            `;
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Función para eliminar indicador de "escribiendo"
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Función para mostrar mensajes de error
+        function showError(message) {
+            const chatMessages = document.getElementById('chat-messages');
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            
+            chatMessages.appendChild(errorDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Función para obtener hora actual formateada
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            return `${hours}:${minutes} ${ampm}`;
+        }
+        
+        // Event listeners
+        document.getElementById('message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Autoajustar altura del textarea
+        const textarea = document.getElementById('message-input');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
+</body>
+</html>

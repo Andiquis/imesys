@@ -17,4 +17,63 @@
   button:hover {
     background-color: #0056b3;
   }
-  
+  .hero-section {
+    background: linear-gradient(270deg, #0052CC, #0052CC, #0052CC);
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+@keyframes gradient-animation {
+  0% {
+      background-position: 0% 50%; /* Comienza en la posición inicial */
+  }
+  50% {
+      background-position: 100% 50%; /* Mueve el degradado hacia la derecha */
+  }
+  100% {
+      background-position: 0% 50%; /* Vuelve al inicio */
+  }
+}
+
+.sticky-header { 
+    position: sticky;
+    top: 0;
+    background: linear-gradient(270deg, #0052CC, #5DD9FC, #0052CC);
+
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+.logo {
+    height: 50px;
+    margin-right: 10px;
+}
+
+
+#circuito-svg {
+  width: 1000px; /* Usamos vw para el ancho */
+
+  height: auto;
+  aspect-ratio: 5 / 3;
+}
+.neon-stroke, .stac{
+  fill: none;
+  stroke: #00ffff;
+  stroke-width: 0.3vw; /* Ajuste relativo */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 0.2vw #00ffff); /* Ajuste relativo */
+}
+
+.carga {
+  fill: url(#cargaGradient) !important;
+  r: 0.5vw; /* Ajuste relativo */
+  filter: drop-shadow(0 0 0.1vw rgb(0, 255, 255)); /* Ajuste relativo */
+}
+

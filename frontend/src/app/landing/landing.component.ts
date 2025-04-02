@@ -13,4 +13,14 @@ export class LandingComponent {
   goToDashboard() {
     this.router.navigate(['/dashboard']);
   }
+
+  showIframe = true;
+
+  // Llamar este método cuando la vista se active
+  reloadIframe() {
+    this.showIframe = false;
+    setTimeout(() => this.showIframe = true, 100);
+  }
 }
+
+
