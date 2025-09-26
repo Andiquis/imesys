@@ -1,0 +1,561 @@
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Barra superior */
+.navbar {
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 12px;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.menu-toggle.rotated {
+  transform: rotate(90deg);
+}
+
+.logout-btn {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: white;
+  color: #0052cc;
+}
+
+.logout-btn i {
+  margin-right: 8px;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(to bottom, #5dd9fc, #0052cc);
+  color: white;
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+  transition: all 0.3s ease;
+  left: -280px;
+  top: 0;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-content {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-section h2 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 1.5rem 0 1rem;
+  letter-spacing: 1px;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-item {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+.menu-item i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  display: none;
+}
+
+.overlay.show {
+  display: block;
+}
+
+/* Contenido principal */
+.content-area {
+  margin-top: 80px;
+  padding: 1rem;
+  transition: margin-left 0.3s;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Buscador */
+.search-container {
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  border-radius: 20px;
+  padding: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.search-inner {
+  background: white;
+  border-radius: 18px;
+  padding: 2px;
+}
+
+.welcome-section {
+  padding: 1.25rem;
+}
+
+.welcome-section h1 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  color: #666;
+  margin-bottom: 1.25rem;
+}
+
+.search-bar {
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: #5dd9fc;
+  box-shadow: 0 0 0 2px rgba(93, 217, 252, 0.2);
+}
+
+.search-bar button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  color: #5dd9fc;
+}
+
+/* Tarjetas de salud */
+.health-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.health-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.health-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.health-card h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+}
+
+.blue-card h3 {
+  color: #1e40af;
+}
+
+.green-card h3 {
+  color: #166534;
+}
+
+.purple-card h3 {
+  color: #5b21b6;
+}
+
+.yellow-card h3 {
+  color: #854d0e;
+}
+
+.health-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.health-card p {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+}
+
+.card-link {
+  color: #3b82f6;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.card-link i {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.doctor-name {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-info {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.doctor-stats {
+  display: flex;
+  justify-content: space-between;
+  color: #444;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Especialistas destacados */
+.specialists-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.specialists-section h2 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.doctor-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s;
+}
+
+.doctor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.doctor-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.doctor-title h3 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.doctor-title p {
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.doctor-description {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.doctor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating {
+  color: #444;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.profile-link {
+  color: #3b82f6;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Sección de contacto */
+.contact-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.contact-section h2 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.contact-section p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(to right, #0097a7, #7ac943);
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.contact-btn:hover {
+  transform: scale(1.05);
+}
+
+.contact-btn i {
+  margin-right: 0.5rem;
+}
+
+/* Chat flotante */
+.floating-chat {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 50;
+  color: white;
+  font-size: 1.5rem;
+  transition: transform 0.3s;
+}
+
+.floating-chat:hover {
+  transform: scale(1.1);
+}
+
+/* Footer */
+.footer {
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  color: white;
+  padding: 1.5rem 0;
+  margin-top: 3rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-logo {
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+
+.footer p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .user-name {
+    display: inline;
+  }
+
+  .health-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .doctors-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-area {
+    margin-left: 0;
+  }
+
+  .sidebar.desktop {
+    left: 0;
+  }
+}
+
+/* Estilos para el buscador médico */
+#searchResults {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+#searchResults a:hover {
+  background-color: #f7fafc;
+}
+
+#medicalSearchInput {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#medicalSearchInput:focus {
+  border-color: #4299e1;
+}
+
+#medicalSearchButton {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+#medicalSearchButton:hover {
+  color: #2b6cb0;
+}

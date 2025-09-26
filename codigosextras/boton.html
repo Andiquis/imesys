@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botón con Degradado</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .boton {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, #0097A7, #7AC943);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .boton img {
+            width: 30px;
+            margin-right: 10px;
+        }
+        .boton:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <a href="#" class="boton">
+        <img src="tu-logo.png" alt="Logo">
+        Cáncer de Mama
+    </a>
+</body>
+</html>

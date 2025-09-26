@@ -1,0 +1,18 @@
+HTTP Code: 200
+Response: {"response":"Saludos. ¿En qué puedo asistirle hoy en relación con información médica?\n"}
+HTTP Code: 200
+Response: {"response":"Buenos días. ¿En qué puedo asistirle hoy en relación a temas médicos?\n"}
+HTTP Code: 200
+Response: {"response":"Como asistente de inteligencia artificial, no tengo sentimientos. Estoy aquí para asistirte con tus consultas médicas. ¿En qué puedo ayudarte hoy?\n"}
+HTTP Code: 200
+Response: {"response":"Hola! Soy Imesys, asistente IA médico aquí para ayudarte. ¿Cuál es el propósito de tu consulta o tienes alguna pregunta en particular sobre síntomas, enfermedades o tratamientos?"}
+HTTP Code: 0
+Response: 
+HTTP Code: 0
+Response: 
+HTTP Code: 200
+Response: {"response":"Hola. ¿En qué puedo ayudarle hoy con información médica? Recuerde que no puedo proporcionar diagnósticos y le recomiendo consultar a un médico para cualquier problema de salud.\n"}
+HTTP Code: 200
+Response: {"response":"Hola. Como Imesys, estoy aquí para brindarte información confiable sobre síntomas, enfermedades y tratamientos médicos. ¿Cuál es el tema que deseas discutir o tienes alguna pregunta en particular? Recuerda que siempre es recomendable consultar con un profesional de la salud si tienes una condición médica específica."}
+HTTP Code: 200
+Response: {"response":"Hola. ¿En qué puedo asistirle hoy con respecto a información médica?\n"}

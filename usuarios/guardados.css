@@ -1,0 +1,10 @@
+.welcome-section {
+    
+    background: linear-gradient(to right, #007bff, #00c6ff); /* Degradado azul a celeste */
+    color: white; /* Letras en blanco */
+    border-radius: 10px; /* Opcional: esquinas redondeadas */
+    text-align: left; /* Alineado a la izquierda */
+    margin: 0; /* Asegura que no haya margen extra */
+    padding: 1rem; /* Ajusta padding */
+    
+}

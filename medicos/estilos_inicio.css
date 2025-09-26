@@ -1,0 +1,1105 @@
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Barra superior */
+.navbar {
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 12px;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.menu-toggle.rotated {
+  transform: rotate(90deg);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  margin-right: 10px;
+}
+
+.default-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  color: #0052cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.user-name {
+  display: none;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: white;
+  color: #0052cc;
+}
+
+.logout-btn i {
+  margin-right: 8px;
+}
+
+/* Sidebar Responsivo */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(to bottom, #1e40af, #1e3a8a, #0f172a);
+  color: white;
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  top: 0;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Desktop: Sidebar siempre visible */
+@media (min-width: 1024px) {
+  .sidebar {
+    left: 0;
+    transform: translateX(0);
+  }
+
+  .sidebar.open {
+    left: 0;
+    transform: translateX(0);
+  }
+
+  /* Ajustar contenido principal para sidebar permanente */
+  .content-area {
+    margin-left: 280px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Ocultar botón hamburguesa en desktop */
+  .menu-toggle {
+    display: none !important;
+  }
+
+  /* Ajustar navbar para sidebar permanente en desktop */
+  #topNavbar {
+    left: 280px !important;
+    width: calc(100% - 280px) !important;
+    right: auto !important;
+  }
+
+  .navbar-desktop {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+  }
+}
+
+/* Tablet y móvil: Sidebar colapsable */
+@media (max-width: 1023px) {
+  .sidebar {
+    left: -280px;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    left: 0;
+    transform: translateX(0);
+  }
+
+  /* Contenido principal sin margen en móvil */
+  .content-area {
+    margin-left: 0;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Mostrar botón hamburguesa en móvil */
+  .menu-toggle {
+    display: block !important;
+  }
+
+  /* Navbar completo en móvil */
+  #topNavbar {
+    left: 0 !important;
+    width: 100% !important;
+    right: 0 !important;
+  }
+
+  .navbar-mobile {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.sidebar-content {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile h1 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.user-profile p {
+  color: #bfdbfe;
+  font-size: 0.875rem;
+}
+
+.menu-section h2 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #93c5fd;
+  margin: 1.5rem 0 1rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(147, 197, 253, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-item {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+.menu-item.active {
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.4), rgba(147, 197, 253, 0.3));
+  border-left: 4px solid #60a5fa;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.menu-item:hover:not(.active) {
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.1));
+  transform: translateX(4px);
+}
+
+.menu-item i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Overlay Responsivo */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+}
+
+.overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Overlay solo visible en móvil */
+@media (min-width: 1024px) {
+  .overlay {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .overlay.show {
+    display: block;
+  }
+}
+
+/* Contenido principal */
+.content-area {
+  margin-top: 80px;
+  padding: 1rem;
+  transition: margin-left 0.3s;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Buscador */
+.search-container {
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  border-radius: 20px;
+  padding: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.search-inner {
+  background: white;
+  border-radius: 18px;
+  padding: 2px;
+}
+
+.welcome-section {
+  padding: 1.25rem;
+}
+
+.welcome-section h1 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  color: #666;
+  margin-bottom: 1.25rem;
+}
+
+.search-bar {
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: #5dd9fc;
+  box-shadow: 0 0 0 2px rgba(93, 217, 252, 0.2);
+}
+
+.search-bar button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  color: #5dd9fc;
+}
+
+/* Tarjetas de salud */
+.health-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.health-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.health-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.health-card h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+}
+
+.blue-card h3 {
+  color: #1e40af;
+}
+
+.green-card h3 {
+  color: #166534;
+}
+
+.purple-card h3 {
+  color: #5b21b6;
+}
+
+.yellow-card h3 {
+  color: #854d0e;
+}
+
+.health-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.health-card p {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+}
+
+.card-link {
+  color: #3b82f6;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.card-link i {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.doctor-name {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-info {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.doctor-stats {
+  display: flex;
+  justify-content: space-between;
+  color: #444;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Especialistas destacados */
+.specialists-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.specialists-section h2 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.doctor-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s;
+}
+
+.doctor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.doctor-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.doctor-title h3 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.doctor-title p {
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.doctor-description {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.doctor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating {
+  color: #444;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.profile-link {
+  color: #3b82f6;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Sección de contacto */
+.contact-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.contact-section h2 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.contact-section p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(to right, #0097a7, #7ac943);
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.contact-btn:hover {
+  transform: scale(1.05);
+}
+
+.contact-btn i {
+  margin-right: 0.5rem;
+}
+
+/* Chat flotante */
+.floating-chat {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 50;
+  color: white;
+  font-size: 1.5rem;
+  transition: transform 0.3s;
+}
+
+.floating-chat:hover {
+  transform: scale(1.1);
+}
+
+/* Footer */
+.footer {
+  background: linear-gradient(to right, #5dd9fc, #0052cc);
+  color: white;
+  padding: 1.5rem 0;
+  margin-top: 3rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-logo {
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+
+.footer p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .user-name {
+    display: inline;
+  }
+
+  .health-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .doctors-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-area {
+    margin-left: 0;
+  }
+
+  .sidebar.desktop {
+    left: 0;
+  }
+}
+
+/* Estilos para el buscador médico */
+#searchResults {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+#searchResults a:hover {
+  background-color: #f7fafc;
+}
+
+#medicalSearchInput {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#medicalSearchInput:focus {
+  border-color: #4299e1;
+}
+
+#medicalSearchButton {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+#medicalSearchButton:hover {
+  color: #2b6cb0;
+}
+
+/* Botones */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.boton:hover {
+  background-color: #2563eb;
+}
+
+.boton-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.boton-outline:hover {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Formularios */
+input,
+textarea,
+select {
+  transition: all 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* === ESTILOS RESPONSIVOS MEJORADOS === */
+
+/* Ajustes generales para el contenido principal */
+.main-content {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-top: 70px; /* Altura base del navbar móvil */
+  min-height: 100vh;
+}
+
+/* Desktop: Contenido principal ajustado al sidebar */
+@media (min-width: 1024px) {
+  .main-content {
+    margin-left: 280px;
+    padding-top: 80px; /* Altura del navbar en desktop */
+  }
+
+  /* Asegurar que el body no tenga overflow horizontal */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Sidebar permanente en desktop */
+  .sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    transform: translateX(0) !important;
+  }
+}
+
+/* Móvil y tablet */
+@media (max-width: 1023px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 70px; /* Navbar más pequeño en móvil */
+  }
+
+  /* Prevenir scroll horizontal cuando el sidebar está abierto */
+  body.sidebar-open {
+    overflow: hidden;
+  }
+}
+
+/* Animaciones suaves para el avatar */
+.user-avatar {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mejoras en los elementos del menú */
+.menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.menu-item:hover::before {
+  left: 100%;
+}
+
+.menu-item.active {
+  position: relative;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-left: 4px solid #ffffff;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Responsividad del botón hamburguesa */
+.menu-toggle {
+  position: relative;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.menu-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Animación del icono hamburguesa */
+.menu-toggle i {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.open ~ * .menu-toggle i {
+  transform: rotate(90deg);
+}
+
+/* Mejoras en la información del usuario en el sidebar */
+.user-info {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user-info p {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Título del menú */
+.menu-title {
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.menu-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #ffffff, transparent);
+}
+
+/* Scroll personalizado para el sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Efectos de carga suaves */
+.sidebar,
+.main-content,
+#topNavbar {
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.sidebar {
+  animation-delay: 0.1s;
+}
+
+.main-content {
+  animation-delay: 0.2s;
+}
+
+#topNavbar {
+  animation-delay: 0s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Breakpoints específicos para tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar {
+    width: 320px;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  /* Ajustar el navbar en tablets */
+  #topNavbar {
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100vw;
+    max-width: 320px;
+  }
+
+  #topNavbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .user-info {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-item {
+    padding: 1rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Modo oscuro adicional (opcional) */
+@media (prefers-color-scheme: dark) {
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Accesibilidad mejorada */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .overlay,
+  .menu-item,
+  .menu-toggle,
+  #topNavbar {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Focus states para accesibilidad */
+.menu-item:focus,
+.menu-toggle:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+.menu-item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* === CORRECCIÓN DEL POSICIONAMIENTO DEL NAVBAR === */
+
+/* Asegurar que el navbar esté correctamente posicionado */
+#topNavbar {
+  position: fixed !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Asegurar que no haya espacios en blanco */
+* {
+  box-sizing: border-box;
+}
+
+/* Eliminar margen del body */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Asegurar que el main-layout no tenga espacios */
+.main-layout {
+  margin: 0;
+  padding: 0;
+}
+
+/* Corrección específica para desktop */
+@media (min-width: 1024px) {
+  /* Navbar ajustado al sidebar en desktop */
+  #topNavbar {
+    left: 280px !important;
+    width: calc(100% - 280px) !important;
+    right: auto !important;
+  }
+
+  /* Asegurar que el sidebar no empuje el navbar */
+  .sidebar {
+    z-index: 999 !important;
+  }
+}
+
+/* Prevenir overflow y espacios en blanco */
+body {
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html {
+  overflow-x: hidden !important;
+}
+
+/* Clase helper para el layout desktop */
+.desktop-layout #topNavbar {
+  left: 280px !important;
+  width: calc(100% - 280px) !important;
+}
+
+/* === CORRECCIÓN DE ALTURA DEL NAVBAR === */
+
+/* Altura fija del navbar */
+#topNavbar {
+  height: 70px; /* Altura fija en móvil */
+  min-height: 70px;
+}
+
+/* Altura del navbar en desktop */
+@media (min-width: 1024px) {
+  #topNavbar {
+    height: 80px;
+    min-height: 80px;
+  }
+}

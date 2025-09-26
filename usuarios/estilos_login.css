@@ -1,0 +1,148 @@
+/* Estilos generales */
+body {
+    background: linear-gradient(to right, #5DD9FC, #0052CC);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* Contenedor principal del login */
+.login-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 82, 204, 0.2);
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+}
+
+/* Contenedores de formularios */
+.form-container {
+    transition: transform 0.5s ease-in-out;
+    width: 50%;
+    padding: 2.5rem 2rem;
+}
+
+.register-container {
+    transform: translateX(100%);
+}
+
+.slide-left {
+    transform: translateX(-100%);
+}
+
+.slide-right {
+    transform: translateX(0%);
+}
+
+/* Campos de entrada */
+.input-field {
+    border-bottom: 2px solid #e2e8f0;
+    transition: all 0.3s;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    outline: none;
+}
+
+.input-field:focus {
+    border-bottom-color: #0052CC;
+}
+
+/* Botones */
+.login-btn {
+    background: linear-gradient(to right, #5DD9FC, #0052CC);
+    transition: all 0.3s;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 82, 204, 0.3);
+}
+
+/* Enlaces y botones de toggle */
+.toggle-form {
+    color: #0052CC;
+    transition: all 0.3s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.toggle-form:hover {
+    text-decoration: underline;
+}
+
+/* Logo y texto */
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0052CC;
+    margin: 0 auto 15px;
+    display: block;
+}
+
+.text-degradado {
+    background: linear-gradient(to right, #5DD9FC, #0052CC);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+}
+
+/* Mensajes de error/éxito */
+.error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-left-width: 4px;
+}
+
+.alert-error {
+    background-color: rgb(254 226 226);
+    border-color: rgb(248 113 113);
+    color: rgb(185 28 28);
+}
+
+.alert-success {
+    background-color: rgb(209 250 229);
+    border-color: rgb(52 211 153);
+    color: rgb(6 95 70);
+}
+
+/* Divider */
+.divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #e2e8f0;
+}
+
+.divider-text {
+    padding: 0 1rem;
+    color: #6b7280;
+}
