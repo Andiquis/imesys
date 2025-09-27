@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     }
 
     // Prepare file for cURL
-    $apiUrl = 'http://127.0.0.1:8000/predict/';
+    $apiUrl = 'http://localhost:5000/predict/';
     $tmpFilePath = $_FILES['file']['tmp_name'];
     $filename = $_FILES['file']['name'];
     $curlFile = new CURLFile($tmpFilePath, $fileType, $filename);

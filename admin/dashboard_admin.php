@@ -72,6 +72,62 @@ foreach ($crecimiento_mensual as $mes) {
     $consultas_por_mes[] = $mes['consultas'];
 }
 
+// Consulta para actividad reciente
+$query = "(SELECT 
+            'cita' as tipo,
+            CONCAT('Cita con ', m.nombre, ' ', m.apellido) as descripcion,
+            u.nombre as usuario_nombre,
+            u.apellido as usuario_apellido,
+            c.fecha_creacion as fecha
+          FROM citas c
+          JOIN medicos m ON c.id_medico = m.id_medico
+          JOIN usuarios u ON c.id_usuario = u.id_usuario
+          ORDER BY c.fecha_creacion DESC
+          LIMIT 5)
+          
+          UNION
+          
+          (SELECT 
+            'consulta' as tipo,
+            CONCAT('Consulta registrada - ', hc.motivo) as descripcion,
+            u.nombre as usuario_nombre,
+            u.apellido as usuario_apellido,
+            hc.fecha_hora as fecha
+          FROM historial_consultas hc
+          JOIN usuarios u ON hc.id_usuario = u.id_usuario
+          ORDER BY hc.fecha_hora DESC
+          LIMIT 5)
+          
+          UNION
+          
+          (SELECT 
+            'registro' as tipo,
+            'Nuevo usuario registrado' as descripcion,
+            nombre as usuario_nombre,
+            apellido as usuario_apellido,
+            fecha_registro as fecha
+          FROM usuarios
+          ORDER BY fecha_registro DESC
+          LIMIT 5)
+          
+          UNION
+          
+          (SELECT 
+            'medico' as tipo,
+            'Nuevo médico registrado' as descripcion,
+            nombre as usuario_nombre,
+            apellido as usuario_apellido,
+            fecha_registro as fecha
+          FROM medicos
+          ORDER BY fecha_registro DESC
+          LIMIT 5)
+          
+          ORDER BY fecha DESC
+          LIMIT 10";
+
+$result = $conexion->query($query);
+$actividad_reciente = $result->fetch_all(MYSQLI_ASSOC);
+
 $conexion->close();
 ?>
 
@@ -105,18 +161,17 @@ $conexion->close();
                 <h1 class="text-xl font-bold">IMESYS Admin</h1>
                 <p class="text-sm text-blue-200">Panel de Administración</p>
             </div>
-            <nav class="p-4">
-                <div class="space-y-2">
-                    <a href="dashboard_admin.php" class="flex items-center space-x-2 px-4 py-2 bg-blue-700 rounded-lg sidebar-item">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="registro_medico.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
+            <nav class="space-y-2">
+                <a href="dashboard_admin.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                    
+                     <a href="administrar_medico.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
                         <i class="fas fa-user-md"></i>
                         <span>Médicos</span>
                     </a>
-                    
-                    <a href="registro_farmacia.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
+                    <a href="administrar_farmacia.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
                         <i class="fas fa-cog"></i>
                         <span>Farmacias</span>
                     </a>
@@ -124,7 +179,6 @@ $conexion->close();
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Cerrar Sesión</span>
                     </a>
-                </div>
             </nav>
             <div class="p-4 border-t border-blue-700 absolute bottom-0 w-64">
                 <p class="text-xs text-blue-200">Sistema IMESYS v1.0</p>
@@ -282,42 +336,45 @@ $conexion->close();
                     </div>
 
                     <!-- Actividad reciente -->
-                    <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Actividad Reciente</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acción</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <!-- Ejemplo estático - deberías conectar con tu tabla de logs -->
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">Dr. Juan Pérez</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Nueva consulta registrada</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><?= date('d/m/Y H:i', strtotime('-1 hour')) ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">María López</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Registro de paciente</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><?= date('d/m/Y H:i', strtotime('-3 hours')) ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">Sistema</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Respaldo automático</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><?= date('d/m/Y H:i', strtotime('-1 day')) ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+                   <!-- Actividad reciente -->
+<div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Actividad Reciente</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acción</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <?php if (empty($actividad_reciente)): ?>
+                    <tr>
+                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">No hay actividad reciente</td>
+                    </tr>
+                <?php else: ?>
+                    <?php 
+                    // Limitar a los últimos 8 registros
+                    $ultimos_8 = array_slice($actividad_reciente, 0, 8);
+                    foreach ($ultimos_8 as $actividad): ?>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <?= htmlspecialchars($actividad['usuario_nombre'] . ' ' . htmlspecialchars($actividad['usuario_apellido'])) ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <?= htmlspecialchars(($actividad['descripcion'])) ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <?= date('d/m/Y H:i', strtotime($actividad['fecha'])) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
+</div>
 
     <script>
         // Gráfico de crecimiento

@@ -67,17 +67,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h1 class="text-xl font-bold">IMESYS Admin</h1>
                 <p class="text-sm text-blue-200">Panel de Administración</p>
             </div>
-            <nav class="p-4">
-                <div class="space-y-2">
-                    <a href="dashboard_admin.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="registro_medico.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
+           <nav class="space-y-2">
+                <a href="dashboard_admin.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                    
+                     <a href="administrar_medico.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
                         <i class="fas fa-user-md"></i>
                         <span>Médicos</span>
                     </a>
-                    <a href="registro_farmacia.php" class="flex items-center space-x-2 px-4 py-2 bg-blue-700 rounded-lg sidebar-item">
+                    <a href="administrar_farmacia.php" class="flex items-center space-x-2 px-4 py-2 hover:bg-blue-700 rounded-lg sidebar-item">
                         <i class="fas fa-cog"></i>
                         <span>Farmacias</span>
                     </a>
@@ -85,7 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Cerrar Sesión</span>
                     </a>
-                </div>
             </nav>
             <div class="p-4 border-t border-blue-700 absolute bottom-0 w-64">
                 <p class="text-xs text-blue-200">Sistema IMESYS v1.0</p>
