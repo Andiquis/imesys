@@ -232,7 +232,7 @@ $stmt->close();
             <?php endif; ?>
 
             <div class="hidden md:inline text-right mr-3">
-                <span>Bienvenido, <?= htmlspecialchars($nombre . ' ' . $apellido); ?></span>
+                <span><?= htmlspecialchars($nombre . ' ' . $apellido); ?></span>
                 <div class="text-xs"><?= htmlspecialchars($telefono); ?></div>
             </div>
             <a href="logout_usuario.php" class="flex items-center text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-blue-700 transition-all duration-300">
