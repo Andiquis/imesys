@@ -1,0 +1,21 @@
+{
+  "name": "imesys/imesys",
+  "description": "Proyecto IMESYS - Gestión de médicos y usuarios",
+  "type": "project",
+  "require": {
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Imesys\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Tu Nombre",
+      "email": "tu@email.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "license": "MIT"
+}

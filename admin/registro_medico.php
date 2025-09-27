@@ -11,7 +11,11 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Conexión a la base de datos
-$conn = new mysqli("localhost", "root", "admin123", "BD_imesys");
+$conn = new mysqli("opal18.opalstack.com", "imesys", "oRzcc2DMgduNeYMb", "bd_imesys");
+
+
+
+
 
 // Verificar conexión
 if ($conn->connect_error) {
