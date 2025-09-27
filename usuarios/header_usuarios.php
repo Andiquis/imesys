@@ -235,9 +235,12 @@ $stmt->close();
                 <span><?= htmlspecialchars($nombre . ' ' . $apellido); ?></span>
                 <div class="text-xs"><?= htmlspecialchars($telefono); ?></div>
             </div>
-            <a href="logout_usuario.php" class="flex items-center text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-blue-700 transition-all duration-300">
-                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+
+            <a href="logout_usuario.php" class="flex items-center justify-center text-white border-0 border-blue-300/60 w-10 h-10 lg:w-12 lg:h-12 rounded-lg hover:bg-blue-200 hover:text-blue-900 hover:border-blue-200 transition-all duration-300 shadow-sm" title="Cerrar Sesión">
+                <i class="fas fa-sign-out-alt text-lg lg:text-xl"></i>
             </a>
+
+             
             
 
         </div>
