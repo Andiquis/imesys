@@ -1,8 +1,8 @@
 <?php
-$host = "localhost"; // Servidor de la base de datos
-$usuario = "root"; // Usuario de la base de datos
-$contrasena = "admin942"; // Contraseña del usuario
-$base_datos = "BD_imesys"; // Nombre de la base de datos
+$host = "opal18.opalstack.com"; // Servidor de la base de datos
+$usuario = "imesys"; // Usuario de la base de datos
+$contrasena = "oRzcc2DMgduNeYMb"; // Contraseña del usuario
+$base_datos = "bd_imesys"; // Nombre de la base de datos
 
 // Crear conexión
 $conexion = new mysqli($host, $usuario, $contrasena, $base_datos);

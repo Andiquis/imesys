@@ -38,3 +38,5 @@ Thumbs.db
 # Others
 coverage/
 *.tgz
+
+backend/model1_MobileNetV2.h5
