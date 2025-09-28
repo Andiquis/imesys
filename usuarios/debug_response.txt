@@ -16,3 +16,5 @@ HTTP Code: 200
 Response: {"response":"Hola. Como Imesys, estoy aquí para brindarte información confiable sobre síntomas, enfermedades y tratamientos médicos. ¿Cuál es el tema que deseas discutir o tienes alguna pregunta en particular? Recuerda que siempre es recomendable consultar con un profesional de la salud si tienes una condición médica específica."}
 HTTP Code: 200
 Response: {"response":"Hola. ¿En qué puedo asistirle hoy con respecto a información médica?\n"}
+HTTP Code: 200
+Response: {"response":"Buenos días. ¿En qué puedo asistirle hoy con respecto a información médica?\n"}

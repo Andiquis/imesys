@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     }
 
     // Prepare file for cURL
-    $apiUrl = 'http://localhost:5000/predict/';
+    $apiUrl = 'http://localhost:5000/api/neumonia';
     $tmpFilePath = $_FILES['file']['tmp_name'];
     $filename = $_FILES['file']['name'];
     $curlFile = new CURLFile($tmpFilePath, $fileType, $filename);
@@ -29,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $apiUrl);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, ['file' => $curlFile]);
+    // Cambiar el nombre del campo a 'image' para que coincida con el backend Node.js
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ['image' => $curlFile]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
