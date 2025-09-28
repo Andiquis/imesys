@@ -13,7 +13,10 @@ if (!API_KEY) {
   console.error("La clave de la API de Gemini no está configurada.");
   process.exit(1);
 }
+
+/*const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent";*/
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+
 
 class BiometricAnalyzer {
   async analyzeBiometrics(biometricData) {

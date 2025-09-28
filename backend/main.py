@@ -32,6 +32,7 @@ def load_model_on_startup():
 
 # Etiquetas de clases
 class_labels = ["Neumonía", "No Neumonía"]
+
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
     try:
@@ -44,7 +45,7 @@ async def predict(file: UploadFile = File(...)):
         img = np.expand_dims(img, axis=0)
 
         # Predicción
-        prediction = model.predict(img)[0][0].item()  # Convertir numpy.float32 a float
+        prediction = model.predict(img)[0][0]
         confidence = round(prediction * 100, 2)
 
         if prediction < 0.5:

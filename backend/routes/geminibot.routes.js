@@ -16,6 +16,7 @@ if (!API_KEY) {
 
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
+
 class Chatbot {
   async getResponse(query) {
     try {
@@ -54,10 +55,90 @@ class Chatbot {
 
 const chatbot = new Chatbot();
 
+/**
+ * @swagger
+ * /api/chatbot:
+ *   get:
+ *     summary: Verificar estado del API de chatbot médico (Gemini)
+ *     description: Retorna un mensaje de estado para verificar que el chatbot médico basado en Gemini está activo.
+ *     tags: [ias]
+ *     responses:
+ *       200:
+ *         description: API funcionando correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: API de Chatbot con Gemini en Express está funcionando.
+ */
+
+
+
 // Ruta para verificar el estado de la API
 router.get("/", (req, res) => {
   res.json({ message: "API de Chatbot con Gemini en Express está funcionando." });
 });
+
+/**
+ * @swagger
+ * /api/chatbot:
+ *   post:
+ *     tags: [ias]
+ *     summary: Consultar a Imesys, el asistente médico con IA (Gemini)
+ *     description: |
+ *       Este endpoint permite enviar una consulta médica a Imesys, un asistente de inteligencia artificial especializado en medicina, alimentado por el modelo Gemini 2.0.  
+ *       El asistente proporciona información validada y recomendaciones generales, sin emitir diagnósticos definitivos.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 example: Tengo fiebre y dolor de cabeza, ¿qué podría ser?
+ *               question:
+ *                 type: string
+ *                 example: ¿Qué síntomas presenta una infección urinaria?
+ *             oneOf:
+ *               - required: [message]
+ *               - required: [question]
+ *     responses:
+ *       200:
+ *         description: Respuesta generada por el asistente Imesys
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                   example: Es posible que los síntomas estén relacionados con una infección. Se recomienda consultar con un profesional de la salud para una evaluación adecuada.
+ *       400:
+ *         description: Consulta vacía o no válida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: La pregunta no puede estar vacía.
+ *       500:
+ *         description: Error interno del servidor al consultar a Gemini
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Ocurrió un error al procesar la solicitud.
+ */
 
 // Ruta principal para procesar las consultas
 router.post("/", async (req, res) => {

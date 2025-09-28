@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementación de Autenticación JWT (JSON Web Tokens)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.4em; }
+        h4 { font-size: 1.2em; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        code {
+            font-family: "Consolas", "Monaco", "Lucida Console", monospace;
+            background: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #c0392b;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: #f8f8f2;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 0;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .note {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .important {
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Implementación de Autenticación JWT (JSON Web Tokens)</h1>
+
+    <p>Este documento describe la implementación completa de la autenticación basada en JWT para una aplicación web, dividida en la parte del <strong>Backend (Node.js/Express)</strong> y el <strong>Frontend (Angular)</strong>.</p>
+
+    <hr>
+
+    <h2>1. Visión General del Flujo JWT</h2>
+    <p>El flujo de autenticación JWT sigue los siguientes pasos:</p>
+    <ol>
+        <li><strong>Login del Usuario:</strong> El usuario envía sus credenciales (email/contraseña) al backend.</li>
+        <li><strong>Generación del JWT:</strong> El backend verifica las credenciales. Si son válidas, genera un JWT que contiene información del usuario (payload) y lo firma con una clave secreta. El JWT tiene una fecha de expiración (<code>exp</code>).</li>
+        <li><strong>Almacenamiento del JWT:</strong> El backend envía el JWT al frontend. El frontend lo almacena de forma segura (ej. <code>localStorage</code>).</li>
+        <li><strong>Acceso a Recursos Protegidos:</strong> Para acceder a una ruta o recurso protegido, el frontend adjunta el JWT en el encabezado <code>Authorization</code> de cada solicitud HTTP (usando el formato <code>Bearer &lt;token&gt;</code>).</li>
+        <li><strong>Verificación del JWT:</strong> El backend intercepta la solicitud, verifica la firma del JWT con la misma clave secreta y comprueba su fecha de expiración.</li>
+        <li><strong>Acceso Concedido/Denegado:</strong>
+            <ul>
+                <li>Si el JWT es válido y no ha expirado, el backend concede el acceso al recurso.</li>
+                <li>Si el JWT es inválido o ha expirado, el backend deniega el acceso (típicamente con un <code>401 Unauthorized</code> o <code>403 Forbidden</code>).</li>
+            </ul>
+        </li>
+        <li><strong>Manejo en el Frontend:</strong> El frontend detecta el error de autenticación (ej. 401), elimina el token expirado y redirige al usuario a la página de login, mostrando un mensaje de "Sesión Expirada".</li>
+    </ol>
+
+    <hr>
+
+    <h2>2. Backend (Node.js / Express)</h2>
+    <p>El backend es responsable de la <strong>creación</strong> y <strong>validación</strong> de los JWTs.</p>
+
+    <h3>2.1. Instalación de Dependencias</h3>
+    <pre><code>npm install express jsonwebtoken bcryptjs cors dotenv</code></pre>
+    <ul>
+        <li><code>express</code>: Framework web para Node.js.</li>
+        <li><code>jsonwebtoken</code>: Para generar y verificar JWTs.</li>
+        <li><code>bcryptjs</code>: Para hashear y comparar contraseñas de forma segura.</li>
+        <li><code>cors</code>: Middleware para habilitar Cross-Origin Resource Sharing.</li>
+        <li><code>dotenv</code>: Para cargar variables de entorno desde un archivo <code>.env</code>.</li>
+    </ul>
+
+    <h3>2.2. Configuración del Servidor Principal</h3>
+    <p>Crea o modifica tu archivo principal de servidor (ej. <code>server.js</code> o <code>app.js</code>).</p>
+    <h4><code>server.js</code></h4>
+    <pre><code class="language-javascript">require('dotenv').config(); // Carga las variables de entorno al inicio
+
+const express = require('express');
+const cors = require('cors'); // Importa cors
+const app = express();
+
+// Configura CORS: Permite solicitudes desde tu frontend Angular
+// **¡IMPORTANTE!** Ajusta 'http://localhost:4200' a la URL de tu frontend en producción
+app.use(cors({
+  origin: 'http://localhost:4200',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json()); // Habilita el body-parser para JSON
+
+// Obtén la clave secreta de JWT desde las variables de entorno
+// **¡MUY IMPORTANTE!** Usa una clave larga y compleja, y no la hagas pública.
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error('ERROR: JWT_SECRET no está definido en el archivo .env');
+  process.exit(1); // Sale de la aplicación si no hay clave secreta
+}
+
+// Rutas de autenticación
+const authRoutes = require('./routes/auth.routes');
+app.use('/api/auth', authRoutes); // Prefijo para rutas de autenticación
+
+// Importa el middleware de verificación de token
+const { verifyToken } = require('./middleware/auth.middleware');
+
+// Rutas Protegidas: Aplica el middleware verifyToken a todas las rutas que lo requieran
+// Ejemplo: si tienes un módulo de usuario que requiere autenticación
+const userRoutes = require('./routes/user.routes'); // Asume un archivo de rutas de usuario
+app.use('/api/users', verifyToken, userRoutes); // Todas las rutas en user.routes.js requerirán JWT
+
+// Puedes tener diferentes tipos de rutas protegidas
+const doctorRoutes = require('./routes/doctor.routes'); // Asume un archivo de rutas de doctor
+app.use('/api/doctors', verifyToken, doctorRoutes);
+
+// Ruta de prueba pública
+app.get('/api/public', (req, res) => {
+  res.json({ message: 'Esta es una ruta pública.' });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+</code></pre>
+
+    <h3>2.3. Variables de Entorno</h3>
+    <p>Crea un archivo <code>.env</code> en la raíz de tu proyecto backend.</p>
+    <h4><code>.env</code></h4>
+    <pre><code>JWT_SECRET=tu_clave_secreta_super_larga_y_aleatoria_aqui_mas_de_32_caracteres
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=imesys
+PORT=5000</code></pre>
+
+    <h3>2.4. Controladores de Autenticación</h3>
+    <p>Crea o modifica el archivo <code>controllers/auth.controller.js</code> para manejar la lógica de login y registro.</p>
+    <h4><code>controllers/auth.controller.js</code></h4>
+    <pre><code class="language-javascript">const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const db = require('../config/db'); // Asume que tienes un archivo de configuración de base de datos
+
+const JWT_SECRET = process.env.JWT_SECRET; // Usar la misma clave secreta
+
+// Función para el login de usuarios
+exports.login = async (req, res) => {
+  const { correo, password } = req.body; // Asume que el frontend envía 'correo' y 'password'
+
+  try {
+    // 1. Buscar usuario en la base de datos por correo
+    const [users] = await db.execute('SELECT * FROM usuarios WHERE correo = ?', [correo]);
+    if (users.length === 0) {
+      return res.status(401).json({ message: 'Credenciales inválidas.' });
+    }
+    const foundUser = users[0];
+
+    // 2. Comparar la contraseña proporcionada con la contraseña hasheada almacenada
+    const isMatch = await bcrypt.compare(password, foundUser.password); // Asume que 'password' es el campo hasheado
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Credenciales inválidas.' });
+    }
+
+    // 3. Crear el payload para el JWT (información NO sensible)
+    const payload = {
+      id_usuario: foundUser.id_usuario,
+      correo: foundUser.correo,
+      rol: foundUser.rol, // Asegúrate de que tu tabla de usuarios tenga un campo 'rol'
+      // Otros datos si son necesarios para el token
+    };
+
+    // 4. Firmar el JWT: Define la expiración aquí
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token expira en 1 hora
+
+    // 5. Enviar respuesta exitosa con el token y los datos del usuario para el frontend
+    res.json({
+      message: 'Login exitoso.',
+      token,
+      user: { // Datos del usuario para que el frontend los almacene
+        id_usuario: foundUser.id_usuario,
+        nombre: foundUser.nombre,
+        apellido: foundUser.apellido,
+        correo: foundUser.correo,
+        rol: foundUser.rol,
+        foto: foundUser.foto || null, // Opcional: si el usuario tiene una foto
+        // Añade cualquier otro campo que necesites en el frontend
+      }
+    });
+
+  } catch (error) {
+    console.error('Error en el login:', error);
+    res.status(500).json({ message: 'Error interno del servidor durante el login.' });
+  }
+};
+
+// Función para el registro de nuevos usuarios
+exports.register = async (req, res) => {
+  const { nombre, apellido, correo, password, rol } = req.body; // Asume los campos para registro
+
+  try {
+    // 1. Verificar si el correo ya existe
+    const [existingUsers] = await db.execute('SELECT correo FROM usuarios WHERE correo = ?', [correo]);
+    if (existingUsers.length > 0) {
+      return res.status(409).json({ message: 'El correo ya está registrado.' });
+    }
+
+    // 2. Hashear la contraseña antes de guardarla
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 es el costo del salt
+
+    // 3. Guardar el nuevo usuario en la base de datos
+    const [result] = await db.execute(
+      'INSERT INTO usuarios (nombre, apellido, correo, password, rol) VALUES (?, ?, ?, ?, ?)',
+      [nombre, apellido, correo, hashedPassword, rol || 'usuario'] // rol por defecto 'usuario'
+    );
+
+    res.status(201).json({ message: 'Usuario registrado exitosamente.', userId: result.insertId });
+
+  } catch (error) {
+    console.error('Error en el registro:', error);
+    res.status(500).json({ message: 'Error interno del servidor durante el registro.' });
+  }
+};
+</code></pre>
+
+    <h3>2.5. Rutas de Autenticación</h3>
+    <p>Crea o modifica el archivo <code>routes/auth.routes.js</code>.</p>
+    <h4><code>routes/auth.routes.js</code></h4>
+    <pre><code class="language-javascript">const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/auth.controller');
+
+router.post('/login', authController.login);
+router.post('/register', authController.register);
+
+module.exports = router;
+</code></pre>
+
+    <h3>2.6. Middleware de Verificación de JWT</h3>
+    <p>Crea el archivo <code>middleware/auth.middleware.js</code>.</p>
+    <h4><code>middleware/auth.middleware.js</code></h4>
+    <pre><code class="language-javascript">const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+exports.verifyToken = (req, res, next) => {
+  // Obtén el encabezado de autorización
+  const authHeader = req.headers['authorization'];
+
+  // Verifica si el encabezado existe y tiene el formato 'Bearer TOKEN'
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Acceso denegado. No se proporcionó token.' });
+  }
+
+  // Extrae el token (la parte después de 'Bearer ')
+  const token = authHeader.split(' ')[1];
+
+  try {
+    // Verifica el token usando la clave secreta
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    // Adjunta el payload decodificado a la solicitud (ej. req.user)
+    // Esto permite que las rutas protegidas accedan a la información del usuario autenticado
+    req.user = decoded;
+    next(); // Pasa al siguiente middleware o a la función de ruta
+  } catch (error) {
+    // Manejo de errores específicos de JWT
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expirado. Por favor, inicia sesión de nuevo.' });
+    }
+    // Para otros errores (JsonWebTokenError, etc.)
+    return res.status(403).json({ message: 'Token inválido o corrupto.' });
+  }
+};
+</code></pre>
+
+    <hr>
+
+    <h2>3. Frontend (Angular)</h2>
+    <p>El frontend es responsable de <strong>enviar credenciales</strong>, <strong>almacenar el JWT</strong>, <strong>adjuntarlo a solicitudes</strong> y <strong>manejar la expiración</strong> de la sesión.</p>
+
+    <h3>3.1. Instalación de Dependencias</h3>
+    <pre><code>npm install jwt-decode</code></pre>
+    <ul>
+        <li><code>jwt-decode</code>: Para decodificar JWTs en el cliente (no verifica la firma, solo el payload y la expiración).</li>
+    </ul>
+
+    <h3>3.2. Servicio de Mensajes de Sesión</h3>
+    <p>Crea el archivo <code>src/app/core/services/session-message.service.ts</code>.</p>
+    <h4><code>src/app/core/services/session-message.service.ts</code></h4>
+    <pre><code class="language-typescript">import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SessionMessageService {
+  private messageSubject = new Subject&lt;string | null&gt;();
+  message$: Observable&lt;string | null&gt; = this.messageSubject.asObservable();
+
+  constructor() { }
+
+  /**
+   * Establece un mensaje para mostrar en la pantalla de login/autenticación.
+   * @param message El mensaje a mostrar (ej. 'Sesión expirada').
+   */
+  setMessage(message: string | null) {
+    this.messageSubject.next(message);
+  }
+
+  /**
+   * Limpia el mensaje después de que ha sido mostrado o ya no es relevante.
+   */
+  clearMessage() {
+    this.messageSubject.next(null);
+  }
+}
+</code></pre>
+
+    <h3>3.3. Servicio de Autenticación (<code>AuthService</code>)</h3>
+    <p>Crea o modifica el archivo <code>src/app/core/auth/user-auth/user-auth.service.ts</code>.</p>
+    <h4><code>src/app/core/auth/user-auth/user-auth.service.ts</code></h4>
+    <pre><code class="language-typescript">import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment'; // Asegúrate de la ruta correcta
+import { jwtDecode } from 'jwt-decode'; // Importa jwtDecode
+import { SessionMessageService } from '../../services/session-message.service'; // Importa el servicio de mensajes
+
+// Define la interfaz User para los datos del usuario almacenados en el frontend
+export interface User {
+  id_usuario: number;
+  nombre: string;
+  apellido: string;
+  correo: string;
+  rol: string; // Asegúrate de incluir el rol
+  foto?: string;
+  // Otros campos que tu backend envíe
+}
+
+// Interfaz para la respuesta de login del backend
+interface LoginResponse {
+  message: string;
+  token: string;
+  user: User;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  // Asegúrate de que esta URL apunte al endpoint de login/registro de tu backend
+  private apiUrl = `${environment.apiUrl}api/auth`;
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private sessionMessageService: SessionMessageService // Inyecta el servicio de mensajes
+  ) {}
+
+  /**
+   * Envía las credenciales al backend para iniciar sesión.
+   * Almacena el token y los datos del usuario en localStorage al éxito.
+   * @param email El correo del usuario.
+   * @param password La contraseña del usuario.
+   * @returns Un Observable con la respuesta del login.
+   */
+  login(email: string, password: string): Observable&lt;LoginResponse&gt; {
+    return this.http.post&lt;LoginResponse&gt;(`${this.apiUrl}/login`, { correo: email, password: password }).pipe(
+      tap(response => {
+        // Almacena el token JWT y los datos del usuario en localStorage
+        localStorage.setItem('access_token', response.token);
+        localStorage.setItem('user_data', JSON.stringify(response.user));
+      })
+    );
+  }
+
+  /**
+   * Cierra la sesión del usuario.
+   * Elimina el token y los datos del usuario de localStorage.
+   * Redirige a la página de autenticación y puede mostrar un mensaje.
+   * @param message Mensaje opcional a mostrar en la pantalla de login (ej. "Sesión expirada").
+   */
+  logout(message: string | null = null): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_data');
+    if (message) {
+      this.sessionMessageService.setMessage(message); // Establece el mensaje antes de redirigir
+    }
+    // Redirige al login de usuario. Ajusta esta ruta si es diferente.
+    this.router.navigate(['/user-auth']);
+  }
+
+  /**
+   * Obtiene el token JWT del localStorage.
+   * @returns El token JWT o null si no existe.
+   */
+  getToken(): string | null {
+    return localStorage.getItem('access_token');
+  }
+
+  /**
+   * Obtiene los datos del usuario almacenados en localStorage.
+   * @returns Los datos del usuario como objeto User o null si no existen.
+   */
+  getUser(): User | null {
+    const userJson = localStorage.getItem('user_data');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
+  /**
+   * Verifica si el usuario está actualmente autenticado y si el token es válido.
+   * @returns true si el token existe y no ha expirado, false en caso contrario.
+   */
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return false; // No hay token, no autenticado
+    }
+    try {
+      const decoded: any = jwtDecode(token);
+      // 'exp' (expiration time) está en segundos Unix Epoch.
+      // Date.now() está en milisegundos, así que dividimos por 1000 para comparar.
+      const currentTime = Date.now() / 1000;
+      return decoded.exp > currentTime; // El token es válido si su tiempo de expiración es mayor que el tiempo actual
+    } catch (error) {
+      // Si hay un error al decodificar (token malformado, etc.), el token es inválido
+      console.error('Error al decodificar o validar token:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Verifica si el usuario tiene un rol específico.
+   * @param requiredRole El rol requerido (ej. 'admin', 'doctor', 'usuario').
+   * @returns true si el usuario está autenticado y tiene el rol especificado, false en caso contrario.
+   */
+  hasRole(requiredRole: string): boolean {
+    const user = this.getUser();
+    return this.isAuthenticated() && user?.rol === requiredRole;
+  }
+}
+</code></pre>
+
+    <h3>3.4. Interceptor HTTP</h3>
+    <p>Crea el archivo <code>src/app/core/interceptors/auth.interceptor.ts</code>. Este interceptor añade el JWT a todas las solicitudes y maneja las respuestas <code>401/403</code>.</p>
+    <h4><code>src/app/core/interceptors/auth.interceptor.ts</code></h4>
+    <pre><code class="language-typescript">import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthService } from '../auth/user-auth/user-auth.service'; // Asegúrate de la ruta correcta
+import { Router } from '@angular/router';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  intercept(request: HttpRequest&lt;unknown&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;unknown&gt;&gt; {
+    const token = this.authService.getToken();
+
+    // 1. Adjuntar token a las solicitudes salientes si existe
+    if (token) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}` // Formato estándar "Bearer Token"
+        }
+      });
+    }
+
+    // 2. Manejar respuestas de error (especialmente 401 Unauthorized y 403 Forbidden)
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        // Si el backend devuelve 401 o 403 (token inválido/expirado/no autorizado)
+        if (error.status === 401 || error.status === 403) {
+          console.warn('Token expirado o inválido. Redirigiendo a login...');
+          // Llama al método logout de AuthService para limpiar el almacenamiento
+          // y redirigir al usuario, pasando un mensaje de expiración.
+          this.authService.logout('Tu sesión ha expirado o es inválida. Por favor, inicia sesión de nuevo.');
+        }
+        // Re-lanzar el error para que sea manejado por el componente que hizo la petición
+        return throwError(() => error);
+      })
+    );
+  }
+}
+</code></pre>
+
+    <div class="warning">
+        <h4>¡IMPORTANTE! Registro del Interceptor</h4>
+        <p>Para que el interceptor funcione, debes registrarlo en tu aplicación Angular.</p>
+        <p><strong>Para aplicaciones Standalone (Angular 15+):</strong> Modifica <code>src/app/app.config.ts</code></p>
+    </div>
+
+    <h4><code>src/app/app.config.ts</code></h4>
+    <pre><code class="language-typescript">import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+// Importa provideHttpClient, withInterceptorsFromDi y HTTP_INTERCEPTORS
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Importa tu interceptor
+
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    // Configura HttpClient para usar interceptores basados en DI
+    provideHttpClient(withInterceptorsFromDi()),
+    // Proporciona el interceptor
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true // multi: true es esencial si tienes (o planeas tener) múltiples interceptores
+    }
+  ]
+};
+</code></pre>
+
+    <div class="warning">
+        <p><strong>Para aplicaciones basadas en Módulos (Angular &lt;15 o proyectos modulares):</strong> Modifica <code>src/app/app.module.ts</code></p>
+    </div>
+
+    <h4><code>src/app/app.module.ts</code></h4>
+    <pre><code class="language-typescript">import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser'; // Puede que ya lo tengas
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; // Importa HttpClientModule y HTTP_INTERCEPTORS
+import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Importa tu interceptor
+
+import { AppRoutingModule } from './app-routing.module'; // Puede que ya lo tengas
+import { AppComponent } from './app.component'; // Puede que ya lo tengas
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    // ... otros componentes declarados en este módulo
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule // Asegúrate de importar HttpClientModule
+  ],
+  providers: [
+    // Proporciona el interceptor
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true // multi: true es esencial si tienes (o planeas tener) múltiples interceptores
+    }
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+</code></pre>
+
+    <h3>3.5. Guardia de Ruta (<code>AuthGuard</code>)</h3>
+    <p>Crea o modifica el archivo <code>src/app/core/guards/auth.guard.ts</code>. Este guardia protegerá tus rutas en función del estado de autenticación.</p>
+    <h4><code>src/app/core/guards/auth.guard.ts</code></h4>
+    <pre><code class="language-typescript">import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+  Router
+} from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthService } from '../auth/user-auth/user-auth.service'; // Asegúrate de la ruta correcta
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard implements CanActivate {
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable&lt;boolean | UrlTree&gt; | Promise&lt;boolean | UrlTree&gt; | boolean | UrlTree {
+
+    // 1. Verificar si el usuario está autenticado usando tu AuthService
+    if (this.authService.isAuthenticated()) {
+      return true; // El usuario está autenticado, permite el acceso a la ruta
+    } else {
+      // 2. Si no está autenticado (o el token expiró), redirigir a la página de login
+      // Llama a logout con un mensaje para que el componente de login lo muestre
+      this.authService.logout('Tu sesión ha expirado. Por favor, inicia sesión de nuevo.');
+      return false; // Bloquea el acceso a la ruta
+    }
+  }
+}
+</code></pre>
+
+    <h3>3.6. Configuración de Rutas</h3>
+    <p>Modifica tu archivo de rutas (<code>src/app/app.routes.ts</code> para standalone o <code>src/app/app-routing.module.ts</code> para módulos) para aplicar el <code>AuthGuard</code> a las rutas protegidas.</p>
+
+    <h4><code>src/app/app.routes.ts</code> (Ejemplo para Standalone Components)</h4>
+    <pre><code class="language-typescript">import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard'; // ¡Importa tu AuthGuard!
+
+// Importa tus componentes
+import UserAuthComponent from './core/auth/user-auth/user-auth.component'; // Tu componente de login de usuario
+import DoctorAuthComponent from './core/auth/doctor-auth/doctor-auth.component'; // Tu componente de login de doctor
+import PublicComponent from './modules/public/public.component'; // Tu componente de página pública
+import UserComponent from './modules/user/user.component'; // Componente principal del módulo de usuario (layout)
+import DoctorComponent from './modules/doctor/doctor.component'; // Componente principal del módulo de doctor (layout)
+
+// Componentes internos (ej. dashboard, etc.) que se cargarán como hijos
+import DashboardUserComponent from './modules/user/pages/dashboard-user/dashboard-user.component';
+import ImesysbotComponent from './modules/user/pages/imesysbot/imesysbot.component';
+// ... otros imports para tus rutas hijas
+
+export const routes: Routes = [
+  // Rutas Públicas / No Protegidas
+  {
+    path: '', // Ruta raíz, redirige a una página pública por defecto
+    redirectTo: 'imesys',
+    pathMatch: 'full'
+  },
+  {
+    path: 'imesys', // Página de inicio pública
+    title: 'Imesys',
+    loadComponent: () => import('./modules/public/public.component'),
+  },
+  {
+    path: 'user-auth', // Ruta de login/registro de usuario
+    title: 'Login de Usuario',
+    loadComponent: () => import('./core/auth/user-auth/user-auth.component'),
+  },
+  {
+    path: 'doctor-auth', // Ruta de login/registro de doctor
+    title: 'Login de Doctor',
+    loadComponent: () => import('./core/auth/doctor-auth/doctor-auth.component'),
+  },
+  // La ruta de 'admin' probablemente necesite su propio guardia de rol/permisos
+  {
+    path: 'admin',
+    title: 'Admin',
+    loadComponent: () => import('./modules/admin/admin.component'),
+  },
+
+  // --- Rutas Protegidas para Usuarios ---
+  {
+    path: 'user-module', // Ruta padre para todas las funcionalidades de usuario
+    title: 'Módulo de Usuario',
+    loadComponent: () => import('./modules/user/user.component'),
+    canActivate: [AuthGuard], // &lt;--- ¡APLICA EL GUARDIA AQUÍ PARA EL MÓDULO DE USUARIO!
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard-user' }, // Redirección por defecto dentro del módulo
+      {
+        path: 'dashboard-user',
+        title: 'Dashboard de Usuario',
+        loadComponent: () => import('./modules/user/pages/dashboard-user/dashboard-user.component'),
+      },
+      {
+        path: 'imesysbot', // Esta ruta y sus componentes estarán protegidos por AuthGuard
+        title: 'Imesys AI',
+        loadComponent: () => import('./modules/user/pages/imesysbot/imesysbot.component'),
+      },
+      {
+        path: 'datos-bio',
+        title: 'Datos Biométricos',
+        loadComponent: () => import('./modules/user/pages/datos-bio/datos-bio.component'),
+      },
+      // ... todas las demás rutas hijas de user-module estarán protegidas automáticamente
+    ],
+  },
+
+  // --- Rutas Protegidas para Doctores ---
+  {
+    path: 'doctor-module', // Ruta padre para todas las funcionalidades de doctor
+    title: 'Módulo de Doctor',
+    loadComponent: () => import('./modules/doctor/doctor.component'),
+    canActivate: [AuthGuard], // &lt;--- ¡APLICA EL GUARDIA AQUÍ PARA EL MÓDULO DE DOCTOR!
+                              // (Considera un DoctorAuthGuard o RoleGuard en el futuro)
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard-doctor' }, // Redirección por defecto
+      {
+        path: 'dashboard-doctor',
+        title: 'Dashboard de Doctor',
+        loadComponent: () => import('./modules/doctor/pages/dashboard-doctor/dashboard-doctor.component'),
+      },
+      // ... todas las demás rutas hijas de doctor-module estarán protegidas automáticamente
+    ],
+  },
+
+  // Ruta comodín: Cualquier ruta no definida va a la página pública
+  {
+    path: '**',
+    redirectTo: 'imesys', // O 'user-auth' si quieres que el default sea el login
+    pathMatch: 'full'
+  },
+];
+</code></pre>
+
+    <h3>3.7. Componente de Login (<code>UserAuthComponent</code>)</h3>
+    <p>Modifica tu componente de login (<code>src/app/core/auth/user-auth/user-auth.component.ts</code>) para suscribirse al servicio de mensajes de sesión y mostrar el mensaje de "Sesión Expirada".</p>
+    <h4><code>src/app/core/auth/user-auth/user-auth.component.ts</code></h4>
+    <pre><code class="language-typescript">import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from './user-auth.service';
+import { SessionMessageService } from '../../services/session-message.service'; // Importa el servicio de mensajes
+import { Subscription } from 'rxjs'; // Para manejar la suscripción
+
+@Component({
+  selector: 'app-user-auth',
+  templateUrl: './user-auth.component.html',
+  styleUrls: ['./user-auth.component.scss'],
+  standalone: true, // Asegúrate de que sea standalone
+  imports: [CommonModule, FormsModule, RouterModule],
+})
+export default class UserAuthComponent implements OnInit, OnDestroy {
+  email: string = '';
+  password: string = '';
+  errorMessage: string | null = null;
+  successMessage: string | null = null; // Para mensajes generales de éxito
+  sessionExpiredMessage: string | null = null; // Mensaje específico de sesión expirada
+
+  private messageSubscription!: Subscription; // Para desuscribirse al destruir el componente
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sessionMessageService: SessionMessageService // Inyecta el servicio de mensajes
+  ) {}
+
+  ngOnInit(): void {
+    // Suscribirse al servicio para recibir mensajes (ej. 'Sesión expirada')
+    this.messageSubscription = this.sessionMessageService.message$.subscribe(message => {
+      this.sessionExpiredMessage = message;
+      // Si hay un mensaje, lo borramos automáticamente después de 5 segundos
+      if (this.sessionExpiredMessage) {
+        setTimeout(() => {
+          this.sessionExpiredMessage = null;
+          this.sessionMessageService.clearMessage(); // Asegura que se limpie en el servicio también
+        }, 5000); // El mensaje desaparece después de 5 segundos
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Es crucial desuscribirse para evitar fugas de memoria
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
+    // También limpia cualquier mensaje pendiente del servicio al destruir el componente
+    this.sessionMessageService.clearMessage();
+  }
+
+  onLogin(): void {
+    this.errorMessage = null; // Limpiar mensajes de error anteriores
+    this.successMessage = null; // Limpiar mensajes de éxito anteriores
+    this.sessionExpiredMessage = null; // Limpiar el mensaje de expiración al intentar login
+
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        // Redirige al usuario al dashboard después de un login exitoso
+        // Ajusta la ruta a tu dashboard de usuario.
+        if (response.user.rol === 'doctor') {
+            this.router.navigate(['/doctor-module/dashboard-doctor']);
+        } else {
+            this.router.navigate(['/user-module/dashboard-user']);
+        }
+      },
+      error: (err) => {
+        this.errorMessage = 'Credenciales incorrectas o error de servidor. Intenta de nuevo.';
+        console.error('Login error:', err);
+      },
+    });
+  }
+
+  // Puedes añadir aquí tu método onRegister si lo tienes en este componente
+  // onRegister(): void { ... }
+}
+</code></pre>
+
+    <h3>3.8. Plantilla del Componente de Login</h3>
+    <p>Añade un elemento en la plantilla HTML de tu componente de login (<code>src/app/core/auth/user-auth/user-auth.component.html</code>) para mostrar el mensaje de sesión expirada.</p>
+    <h4><code>src/app/core/auth/user-auth/user-auth.component.html</code></h4>
+    <pre><code class="language-html">&lt;!-- Dentro de tu plantilla HTML del componente user-auth --&gt;
+
+&lt;!-- Mensaje de sesión expirada (usará CommonModule para *ngIf) --&gt;
+&lt;div *ngIf="sessionExpiredMessage" class="alert alert-warning text-center" style="background-color: #ffe0b2; border: 1px solid #ff9800; color: #e65100; padding: 10px; margin-bottom: 15px; border-radius: 5px;"&gt;
+  {{ sessionExpiredMessage }}
+&lt;/div&gt;
+
+&lt;!-- Mensaje de error general de login (si ya lo tienes) --&gt;
+&lt;div *ngIf="errorMessage" class="alert alert-danger text-center" style="background-color: #ffebee; border: 1px solid #ef5350; color: #c62828; padding: 10px; margin-bottom: 15px; border-radius: 5px;"&gt;
+  {{ errorMessage }}
+&lt;/div&gt;
+
+&lt;!-- El resto de tu formulario de login --&gt;
+&lt;form (ngSubmit)="onLogin()"&gt;
+  &lt;!-- Campos de email y contraseña --&gt;
+  &lt;div style="margin-bottom: 15px;"&gt;
+    &lt;label for="email" style="display: block; margin-bottom: 5px; font-weight: bold;"&gt;Correo:&lt;/label&gt;
+    &lt;input type="email" id="email" [(ngModel)]="email" name="email" placeholder="tu@ejemplo.com" required
+           style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"&gt;
+  &lt;/div&gt;
+  &lt;div style="margin-bottom: 15px;"&gt;
+    &lt;label for="password" style="display: block; margin-bottom: 5px; font-weight: bold;"&gt;Contraseña:&lt;/label&gt;
+    &lt;input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Tu contraseña" required
+           style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"&gt;
+  &lt;/div&gt;
+  &lt;button type="submit"
+          style="width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em;"&gt;
+    Iniciar Sesión
+  &lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- ... (resto de tu HTML, ej. enlaces a registro) --&gt;
+</code></pre>
+
+    <hr>
+
+    <h2>4. Consideraciones Adicionales y Buenas Prácticas</h2>
+    <ul>
+        <li><strong>Refresco de Tokens (Refresh Tokens):</strong> Para sesiones más largas sin que el usuario tenga que reautenticarse, puedes implementar <code>Refresh Tokens</code>. Tu servidor emite un JWT de corta duración y un Refresh Token de larga duración. Cuando el JWT expira, el frontend usa el Refresh Token para obtener un nuevo JWT. Esto es más avanzado y requiere lógica adicional tanto en el backend como en el frontend.</li>
+        <li><strong>Roles y Permisos:</strong> Si tu aplicación tiene diferentes tipos de usuarios (admin, doctor, usuario), puedes usar el campo <code>rol</code> en el payload del JWT y crear <code>RoleGuards</code> en Angular para proteger rutas específicas basadas en roles, y también en el backend para autorizar acciones.</li>
+        <li><strong>Seguridad de <code>localStorage</code>:</strong> <code>localStorage</code> no es 100% seguro contra ataques XSS. Para aplicaciones de muy alta seguridad, considera alternativas como <code>HttpOnly cookies</code> (que complican el manejo de tokens en Angular) o Web Workers. Para la mayoría de las aplicaciones empresariales, <code>localStorage</code> es un compromiso aceptable con las precauciones adecuadas (como el uso de HTTPS).</li>
+        <li><strong>Manejo de Errores Global:</strong> El Interceptor HTTP es crucial para manejar errores de autenticación (como 401/403) de manera centralizada en el frontend.</li>
+        <li><strong>Variables de Entorno:</strong> Siempre usa variables de entorno (<code>process.env</code> en Node.js, <code>environment.ts</code> en Angular) para las claves secretas y URLs de API, y nunca las subas a tu repositorio de código (añádelas a <code>.gitignore</code>).</li>
+    </ul>
+
+    <p>Esta documentación debería darte una base sólida para implementar un sistema de autenticación JWT completo y seguro en tu aplicación.</p>
+
+</body>
+</html>

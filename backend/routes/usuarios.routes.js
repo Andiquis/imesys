@@ -3,6 +3,11 @@ import pool from "../config/db.js";
 import bcrypt from 'bcryptjs';
 import multer from 'multer';
 import path from 'path';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const secretKey = process.env.JWT_SECRET;
 
 const router = Router();
 const saltRounds = 10; // Número de rondas para el salt de bcrypt
@@ -20,6 +25,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Ruta para el login
+
 router.post("/login", async (req, res) => {
   const { correo, contrasena } = req.body;
 
@@ -29,7 +35,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      "SELECT id_usuario, nombre, apellido, correo, contrasena, foto FROM usuarios WHERE correo = ?",
+      "SELECT id_usuario, nombre, apellido, correo, contrasena, dni, foto, telefono, direccion, fecha_nacimiento, genero FROM usuarios WHERE correo = ?",
       [correo]
     );
 
@@ -44,18 +50,35 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Credenciales incorrectas" });
     }
 
-    res.json({
+    const tokenPayload = {
       id_usuario: user.id_usuario,
       nombre: user.nombre,
       apellido: user.apellido,
       correo: user.correo,
-      foto: user.foto // Añadir la propiedad `foto`
+      dni: user.dni
+    };
+    const token = jwt.sign(tokenPayload, secretKey, { expiresIn: '1h' });
+
+    res.json({
+      token,
+      id_usuario: user.id_usuario,
+      nombre: user.nombre,
+      apellido: user.apellido,
+      correo: user.correo,
+      dni: user.dni,
+      foto: user.foto,
+      telefono: user.telefono,
+      direccion: user.direccion,
+      fecha_nacimiento: user.fecha_nacimiento,
+      genero: user.genero
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error durante el inicio de sesión" });
   }
 });
+
+
 
 // Obtener todos los usuarios
 router.get("/", async (req, res) => {
